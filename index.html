@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamFlix - Watch Unlimited</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #e50914;
+            text-shadow: 0 0 20px rgba(229, 9, 20, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #e50914;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #e50914;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiB2aWV3Qm94PSIwIDAgMTkyMCAxMDgwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSJ1cmwoI3BhaW50MF9saW5lYXJfMF8xKSIvPgo8ZGVmcz4KPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDBfbGluZWFyXzBfMSIgeDE9IjAiIHkxPSIwIiB4Mj0iMTkyMCIgeTI9IjEwODAiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzBDMEMwQyIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMxQTFBMUEiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #e50914, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #e50914, #ff1744);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 8px 25px rgba(229, 9, 20, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(229, 9, 20, 0.5);
+        }
+
+        .section {
+            padding: 80px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            text-align: center;
+            background: linear-gradient(45deg, #e50914, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .content-card {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(229, 9, 20, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #e50914, #ff6b6b);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .content-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .content-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(229, 9, 20, 0.2);
+        }
+
+        .content-card h3 {
+            color: #e50914;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .content-card p {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            gap: 20px;
+        }
+
+        .tab-button {
+            background: transparent;
+            color: white;
+            border: 2px solid #e50914;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .tab-button.active,
+        .tab-button:hover {
+            background: #e50914;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(229, 9, 20, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .about-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .about-text {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .about-text p {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            border-radius: 15px;
+            border: 1px solid rgba(229, 9, 20, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(229, 9, 20, 0.2);
+        }
+
+        .stat-item h3 {
+            font-size: 2.5rem;
+            color: #e50914;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .stat-item p {
+            opacity: 0.8;
+            font-size: 1.1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .feature-card {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(229, 9, 20, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #e50914, #ff6b6b);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(229, 9, 20, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .feature-card h4 {
+            color: #e50914;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .feature-card p {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            padding: 60px 5% 20px;
+            border-top: 2px solid rgba(229, 9, 20, 0.2);
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h4 {
+            color: #e50914;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            line-height: 1.8;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #e50914;
+        }
+
+        .footer-section a {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            background: rgba(229, 9, 20, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(229, 9, 20, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: #e50914;
+            transform: translateY(-2px);
+        }
+
+        .manager-access-section {
+            text-align: center;
+            margin: 40px 0;
+            padding: 40px;
+            background: linear-gradient(145deg, #0f0f0f, #1f1f1f);
+            border-radius: 20px;
+            border: 2px solid rgba(229, 9, 20, 0.3);
+            max-width: 600px;
+            margin: 40px auto;
+            box-shadow: 0 10px 30px rgba(229, 9, 20, 0.1);
+        }
+
+        .manager-access-section h4 {
+            color: #e50914;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(229, 9, 20, 0.3);
+        }
+
+        .manager-access-section p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+
+        .manager-access-btn {
+            background: linear-gradient(45deg, #e50914, #ff1744);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 25px rgba(229, 9, 20, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .manager-access-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .manager-access-btn:hover::before {
+            left: 100%;
+        }
+
+        .manager-access-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(229, 9, 20, 0.4);
+        }
+
+        .manager-access-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .upload-access {
+            text-align: center;
+            margin: 40px 0;
+            padding: 30px;
+            background: linear-gradient(145deg, #0f0f0f, #1f1f1f);
+            border-radius: 20px;
+            border: 1px solid rgba(229, 9, 20, 0.1);
+            max-width: 500px;
+            margin: 40px auto;
+        }
+
+        .upload-input {
+            width: 100%;
+            max-width: 300px;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(229, 9, 20, 0.3);
+            border-radius: 25px;
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .upload-input:focus {
+            border-color: #e50914;
+            box-shadow: 0 0 20px rgba(229, 9, 20, 0.3);
+            transform: scale(1.05);
+        }
+
+        .upload-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .access-message {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .access-message.success {
+            color: #4CAF50;
+            opacity: 1;
+        }
+
+        .access-message.error {
+            color: #f44336;
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(229, 9, 20, 0.2);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .upload-section {
+            background: linear-gradient(145deg, #0a0a0a, #1f1f1f);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            border: 2px solid #e50914;
+            display: none;
+        }
+
+        .upload-section.show {
+            display: block;
+            animation: slideDown 0.5s ease;
+        }
+
+        .upload-form {
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            color: #e50914;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(229, 9, 20, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #e50914;
+            box-shadow: 0 0 10px rgba(229, 9, 20, 0.3);
+        }
+
+        .upload-button {
+            background: linear-gradient(45deg, #e50914, #ff1744);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .upload-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(229, 9, 20, 0.4);
+        }
+
+        .login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .login-modal.show {
+            display: flex;
+        }
+
+        .login-form {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid #e50914;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .login-form h3 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #e50914;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">StreamFlix</div>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#series">Series</a>
+            <a href="#movies">Movies</a>
+            <a href="#blogs">Blogs</a>
+            <a href="#news">News</a>
+            <a href="#about">About</a>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Unlimited Entertainment</h1>
+            <p>Watch unlimited movies, series, and stay updated with latest news and blogs</p>
+            <a href="#content" class="cta-button">Start Watching</a>
+        </div>
+    </section>
+
+    <section class="section" id="content">
+        <div class="tab-container">
+            <button class="tab-button active" onclick="showTab('series')">Series</button>
+            <button class="tab-button" onclick="showTab('movies')">Movies</button>
+            <button class="tab-button" onclick="showTab('blogs')">Blogs</button>
+            <button class="tab-button" onclick="showTab('news')">News</button>
+        </div>
+
+        <div id="series" class="tab-content active">
+            <h2>Latest Series</h2>
+            <div class="content-grid">
+                <div class="content-card">
+                    <h3>The Crown</h3>
+                    <p>A biographical drama about the reign of Queen Elizabeth II, exploring the personal and political challenges of the British royal family.</p>
+                </div>
+                <div class="content-card">
+                    <h3>Stranger Things</h3>
+                    <p>A science fiction horror series set in the 1980s, following a group of kids as they encounter supernatural forces in their small town.</p>
+                </div>
+                <div class="content-card">
+                    <h3>Money Heist</h3>
+                    <p>A Spanish heist thriller series about a group of robbers who carry out an elaborate plan to steal from the Royal Mint of Spain.</p>
+                </div>
+                <div class="content-card">
+                    <h3>The Witcher</h3>
+                    <p>A fantasy drama series based on the book series, following Geralt of Rivia, a monster hunter in a world full of magic and political intrigue.</p>
+                </div>
+                <div class="content-card">
+                    <h3>Sacred Games</h3>
+                    <p>An Indian crime thriller series that follows a troubled police officer and a criminal mastermind in a race against time to save Mumbai.</p>
+                </div>
+                <div class="content-card">
+                    <h3>Bridgerton</h3>
+                    <p>A period romance series set in Regency-era London, following the romantic entanglements of the Bridgerton family.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="movies" class="tab-content">
+            <h2>Popular Movies</h2>
+            <div class="content-grid">
+                <div class="content-card">
+                    <h3>Avengers: Endgame</h3>
+                    <p>The epic conclusion to the Infinity Saga, where the remaining Avengers assemble to reverse Thanos' actions and restore balance to the universe.</p>
+                </div>
+                <div class="content-card">
+                    <h3>The Dark Knight</h3>
+                    <p>Batman faces his greatest challenge as the Joker wreaks havoc on Gotham City, testing his moral code and resolve.</p>
+                </div>
+                <div class="content-card">
+                    <h3>Inception</h3>
+                    <p>A thief who enters people's dreams to steal secrets must perform the impossible task of inception - planting an idea in someone's mind.</p>
+                </div>
+                <div class="content-card">
+                    <h3>Parasite</h3>
+                    <p>A dark comedy thriller about a poor family who infiltrates the lives of a wealthy family, leading to unexpected consequences.</p>
+                </div>
+                <div class="content-card">
+                    <h3>Dangal</h3>
+                    <p>The inspiring story of wrestler Mahavir Singh Phogat who trains his daughters to become world-class wrestlers.</p>
+                </div>
+                <div class="content-card">
+                    <h3>3 Idiots</h3>
+                    <p>A comedy-drama about three friends whose lives take different paths after graduation, exploring education and following your passion.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="blogs" class="tab-content">
+            <h2>Latest Blogs</h2>
+            <div class="content-grid">
+                <div class="content-card">
+                    <h3>The Future of Streaming</h3>
+                    <p>How streaming platforms are revolutionizing entertainment consumption and what to expect in the coming years.</p>
+                </div>
+                <div class="content-card">
+                    <h3>Behind the Scenes: Movie Magic</h3>
+                    <p>Exploring the incredible work that goes into creating the visual effects and cinematography of modern blockbusters.</p>
+                </div>
+                <div class="content-card">
+                    <h3>International Cinema Rising</h3>
+                    <p>How global content is breaking barriers and finding audiences worldwide, creating a truly connected entertainment ecosystem.</p>
+                </div>
+                <div class="content-card">
+                    <h3>The Art of Storytelling</h3>
+                    <p>What makes a great story? Analyzing the elements that keep audiences engaged and emotionally invested.</p>
+                </div>
+                <div class="content-card">
+                    <h3>Technology in Entertainment</h3>
+                    <p>From AI to virtual reality, how cutting-edge technology is shaping the future of entertainment experiences.</p>
+                </div>
+                <div class="content-card">
+                    <h3>Cultural Impact of Series</h3>
+                    <p>How TV series are influencing culture, fashion, and social conversations around the world.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="news" class="tab-content">
+            <h2>Entertainment News</h2>
+            <div class="content-grid">
+                <div class="content-card">
+                    <h3>New Marvel Phase Announced</h3>
+                    <p>Marvel Studios reveals their ambitious plans for the next phase of the MCU, including new heroes and storylines.</p>
+                </div>
+                <div class="content-card">
+                    <h3>Bollywood Box Office Records</h3>
+                    <p>Latest Indian films breaking box office records and setting new benchmarks for the industry.</p>
+                </div>
+                <div class="content-card">
+                    <h3>Streaming Wars Heat Up</h3>
+                    <p>Major platforms announce new content strategies and exclusive deals to compete for viewer attention.</p>
+                </div>
+                <div class="content-card">
+                    <h3>Award Season Predictions</h3>
+                    <p>Early predictions and analysis of the upcoming award season's most promising contenders.</p>
+                </div>
+                <div class="content-card">
+                    <h3>International Film Festivals</h3>
+                    <p>Coverage of major film festivals around the world and the emerging talent being showcased.</p>
+                </div>
+                <div class="content-card">
+                    <h3>Celebrity Interviews</h3>
+                    <p>Exclusive interviews with your favorite stars discussing their latest projects and upcoming ventures.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+        <h2>About StreamFlix</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <p>StreamFlix is your ultimate destination for premium entertainment content. We bring you the latest movies, trending series, insightful blogs, and breaking entertainment news all in one place.</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <h3>10,000+</h3>
+                        <p>Movies & Series</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>50+</h3>
+                        <p>Countries</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>24/7</h3>
+                        <p>Streaming</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>HD</h3>
+                        <p>Quality</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎬</div>
+                    <h4>Latest Content</h4>
+                    <p>Stay updated with the newest releases and trending content from around the world.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h4>Multi-Device</h4>
+                    <p>Watch anywhere, anytime on your favorite device - phone, tablet, or computer.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌟</div>
+                    <h4>Premium Quality</h4>
+                    <p>Enjoy crystal clear HD streaming with superior audio quality.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h4>Regular Updates</h4>
+                    <p>Fresh content added regularly to keep your entertainment experience exciting.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer with Hidden Upload Access -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>StreamFlix</h4>
+                <p>Your ultimate entertainment destination</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="#home">Home</a>
+                <a href="#series">Series</a>
+                <a href="#movies">Movies</a>
+                <a href="#blogs">Blogs</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p>Email: info@streamflix.com</p>
+                <p>Phone: +91 9876543210</p>
+            </div>
+            <div class="footer-section">
+                <h4>Follow Us</h4>
+                <div class="social-links">
+                    <a href="#">Facebook</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">Instagram</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Manager Upload Access Section -->
+        <div class="manager-access-section">
+            <h4>Content Management</h4>
+            <p>For content managers and authorized personnel</p>
+            <button class="manager-access-btn" onclick="showManagerLogin()">Upload Content</button>
+            <div id="accessMessage" class="access-message"></div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 StreamFlix. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Upload Section for Manager -->
+    <div class="upload-section" id="uploadSection">
+        <h2>Content Upload Manager</h2>
+        <form class="upload-form" id="uploadForm">
+            <div class="form-group">
+                <label for="contentType">Content Type:</label>
+                <select id="contentType" required>
+                    <option value="">Select Content Type</option>
+                    <option value="series">Series</option>
+                    <option value="movie">Movie</option>
+                    <option value="blog">Blog</option>
+                    <option value="news">News</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" id="title" required placeholder="Enter content title">
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" rows="4" required placeholder="Enter content description"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="mediaFile">Media File:</label>
+                <input type="file" id="mediaFile" accept="video/*,image/*" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="thumbnail">Thumbnail:</label>
+                <input type="file" id="thumbnail" accept="image/*">
+            </div>
+            
+            <button type="submit" class="upload-button">Upload Content</button>
+        </form>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-form">
+            <button class="close-btn" onclick="closeLogin()">&times;</button>
+            <h3>Manager Login</h3>
+            <form id="managerLogin">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="upload-button">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Manager authentication
+        const MANAGER_EMAIL = 'rajveershrivastav34@gmail.com';
+        const MANAGER_PASSWORD = 'Rajveer1';
+        let isManagerLoggedIn = false;
+
+        // Check for upload keyword in URL or console
+        function checkUploadAccess() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('upload') === 'true' || window.location.hash === '#upload') {
+                showLoginModal();
+            }
+        }
+
+        // Listen for "upload" command in console or URL
+        function enableUploadMode() {
+            if (window.location.search.includes('upload') || window.location.hash.includes('upload')) {
+                showLoginModal();
+            }
+        }
+
+        // Console command for upload access
+        console.log('Manager Upload Access: Type "upload" to access upload panel');
+        
+        // Global upload function
+        window.upload = function() {
+            showLoginModal();
+        };
+
+        function showLoginModal() {
+            document.getElementById('loginModal').classList.add('show');
+        }
+
+        function closeLogin() {
+            document.getElementById('loginModal').classList.remove('show');
+        }
+
+        // Handle manager login
+        document.getElementById('managerLogin').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (email === MANAGER_EMAIL && password === MANAGER_PASSWORD) {
+                isManagerLoggedIn = true;
+                document.getElementById('loginModal').classList.remove('show');
+                document.getElementById('uploadSection').classList.add('show');
+                alert('Manager login successful! Upload panel is now accessible.');
+                
+                // Scroll to upload section
+                document.getElementById('uploadSection').scrollIntoView({ behavior: 'smooth' });
+            } else {
+                alert('Invalid credentials! Access denied.');
+            }
+        });
+
+        // Manager access button function
+        function showManagerLogin() {
+            const messageDiv = document.getElementById('accessMessage');
+            messageDiv.textContent = 'Opening manager login...';
+            messageDiv.className = 'access-message success';
+            
+            setTimeout(() => {
+                showLoginModal();
+                messageDiv.textContent = '';
+                messageDiv.className = 'access-message';
+            }, 1000);
+        }
+
+        // Enhanced upload form with better file handling
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!isManagerLoggedIn) {
+                alert('Unauthorized access!');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('contentType', document.getElementById('contentType').value);
+            formData.append('title', document.getElementById('title').value);
+            formData.append('description', document.getElementById('description').value);
+            formData.append('mediaFile', document.getElementById('mediaFile').files[0]);
+            formData.append('thumbnail', document.getElementById('thumbnail').files[0]);
+            
+            // Show upload progress simulation
+            const title = document.getElementById('title').value;
+            const contentType = document.getElementById('contentType').value;
+            
+            const progressDiv = document.createElement('div');
+            progressDiv.innerHTML = `
+                <div style="margin-top: 20px; padding: 15px; background: rgba(76, 175, 80, 0.1); border-radius: 10px; border: 1px solid rgba(76, 175, 80, 0.3);">
+                    <p style="color: #4CAF50; margin-bottom: 10px;">✅ Upload successful!</p>
+                    <p style="color: #4CAF50; font-size: 0.9rem;">Content "${title}" has been added to ${contentType} section</p>
+                </div>
+            `;
+            
+            document.getElementById('uploadSection').appendChild(progressDiv);
+            
+            // Remove progress message after 5 seconds
+            setTimeout(() => {
+                progressDiv.remove();
+            }, 5000);
+            
+            // Add the new content to the appropriate section
+            const description = document.getElementById('description').value;
+            
+            addNewContent(contentType, title, description);
+            
+            // Reset form
+            document.getElementById('uploadForm').reset();
+        });
+
+        function addNewContent(type, title, description) {
+            const contentGrid = document.querySelector(`#${type} .content-grid`) || 
+                               document.querySelector(`#${type}s .content-grid`);
+            
+            if (contentGrid) {
+                const newCard = document.createElement('div');
+                newCard.className = 'content-card';
+                newCard.style.border = '2px solid #4CAF50';
+                newCard.innerHTML = `
+                    <h3>${title} <span style="color: #4CAF50; font-size: 0.8rem;">[NEW]</span></h3>
+                    <p>${description}</p>
+                `;
+                contentGrid.insertBefore(newCard, contentGrid.firstChild);
+                
+                // Remove NEW tag after 10 seconds
+                setTimeout(() => {
+                    newCard.style.border = '1px solid rgba(229, 9, 20, 0.1)';
+                    const newTag = newCard.querySelector('span');
+                    if (newTag) newTag.remove();
+                }, 10000);
+            }
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(0, 0, 0, 0.95)';
+            } else {
+                navbar.style.background = 'rgba(0, 0, 0, 0.9)';
+            }
+        });
+
+        // Initialize upload access check
+        checkUploadAccess();
+        
+        // Keyboard shortcut for upload access (Ctrl + U)
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'u') {
+                e.preventDefault();
+                showLoginModal();
+            }
+        });
+    </script>
+</body>
+</html>
